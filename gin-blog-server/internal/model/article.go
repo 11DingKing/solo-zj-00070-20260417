@@ -102,7 +102,7 @@ func GetBlogArticleList(db *gorm.DB, page, size, categoryId, tagId int, keyword 
 		db = db.Where("id IN (SELECT article_id FROM article_tag WHERE tag_id = ?)", tagId)
 	}
 	if keyword != "" {
-		db = db.Where("title LIKE ? OR desc LIKE ?", "%"+keyword+"%", "%"+keyword+"%")
+		db = db.Where("title LIKE ? OR `desc` LIKE ?", "%"+keyword+"%", "%"+keyword+"%")
 	}
 
 	db = db.Count(&total)
