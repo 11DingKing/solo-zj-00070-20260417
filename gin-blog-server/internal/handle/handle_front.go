@@ -40,8 +40,9 @@ type FCommentQuery struct {
 
 type FArticleQuery struct {
 	PageQuery
-	CategoryId int `form:"category_id"`
-	TagId      int `form:"tag_id"`
+	CategoryId int    `form:"category_id"`
+	TagId      int    `form:"tag_id"`
+	Keyword    string `form:"keyword"`
 }
 
 type ArchiveVO struct {
@@ -285,7 +286,7 @@ func (*Front) GetArticleList(c *gin.Context) {
 		return
 	}
 
-	list, _, err := model.GetBlogArticleList(GetDB(c), query.Page, query.Size, query.CategoryId, query.TagId)
+	list, _, err := model.GetBlogArticleList(GetDB(c), query.Page, query.Size, query.CategoryId, query.TagId, query.Keyword)
 	if err != nil {
 		ReturnError(c, g.ErrDbOp, err)
 		return

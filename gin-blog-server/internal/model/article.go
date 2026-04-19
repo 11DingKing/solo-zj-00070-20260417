@@ -91,7 +91,7 @@ func GetBlogArticle(db *gorm.DB, id int) (data *Article, err error) {
 }
 
 // 前台文章列表（不在回收站并且状态为公开）
-func GetBlogArticleList(db *gorm.DB, page, size, categoryId, tagId int) (data []Article, total int64, err error) {
+func GetBlogArticleList(db *gorm.DB, page, size, categoryId, tagId int, keyword string) (data []Article, total int64, err error) {
 	db = db.Model(Article{})
 	db = db.Where("is_delete = 0 AND status = 1") // *
 
@@ -100,6 +100,9 @@ func GetBlogArticleList(db *gorm.DB, page, size, categoryId, tagId int) (data []
 	}
 	if tagId != 0 {
 		db = db.Where("id IN (SELECT article_id FROM article_tag WHERE tag_id = ?)", tagId)
+	}
+	if keyword != "" {
+		db = db.Where("title LIKE ? OR desc LIKE ?", "%"+keyword+"%", "%"+keyword+"%")
 	}
 
 	db = db.Count(&total)
